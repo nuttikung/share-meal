@@ -86,17 +86,16 @@ pub fn Overview() -> Element {
                     }
                 }
             }
-            div {
-                id: "tab",
-                button {
-                    id: "orders",
-                    onclick: handleOrderClick,
-                    "รายการ"
+
+
+            div { class: "radio-inputs",
+                label { class: "radio",
+                    input { r#type: "radio", name: "radio", checked: context().view == "orders", onclick: handleOrderClick}
+                    span { class: "name", "รายการ" }
                 }
-                button {
-                    id: "members",
-                    onclick: handleMemberClick,
-                    "คนจ่าย"
+                label { class: "radio",
+                    input { r#type: "radio", name: "radio", checked: context().view == "members", onclick: handleMemberClick}
+                    span { class: "name", "คนจ่าย" }
                 }
             }
 

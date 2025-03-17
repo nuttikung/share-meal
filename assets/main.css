@@ -2,7 +2,8 @@
 body {
     background-color: #0f1116;
     /* color: #ffffff; */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: monospace, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; */
     margin: 20px;
     color: #000000;
 }
@@ -36,18 +37,54 @@ main {
 }
 
 .input {
-  font-family: monospace;
-  max-width: 190px;
-  outline: none;
-  border: 1px solid #dadada;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f3f7fe;
-  transition: .3s;
-  color: #3b82f6;
+    max-width: 190px;
+    outline: none;
+    border: 1px solid #dadada;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f3f7fe;
+    transition: 0.3s;
+    color: #3b82f6;
 }
 
 .input:focus {
-  border: 1px solid #3b82f6;
-  box-shadow: 0 0 0 4px #3b83f65f
+    border: 1px solid #3b82f6;
+    box-shadow: 0 0 0 4px #3b83f65f;
+}
+
+.radio-inputs {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #eee;
+    box-sizing: border-box;
+    box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+    padding: 0.25rem;
+    font-size: 14px;
+}
+
+.radio-inputs .radio {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.radio-inputs .radio input {
+    display: none;
+}
+
+.radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0.25rem 0;
+    color: rgba(51, 65, 85, 1);
+    transition: all 0.1s ease-in-out;
+}
+
+.radio-inputs .radio input:checked + .name {
+    flex: 1;
+    font-weight: 600;
+    color: #3b82f6;
 }
