@@ -37,7 +37,7 @@ fn App() -> Element {
         Signal::new(AppState {
             view: String::from("orders"),
             orders: vec![],
-            members: vec![],
+            members: vec![String::from("test")],
         })
     });
 
@@ -105,7 +105,6 @@ pub fn Overview() -> Element {
             } else {
                 MemberList {}
                 div {
-
                     MemberInput {}
                 }
             }
@@ -126,10 +125,15 @@ pub fn OrderList() -> Element {
 
 #[component]
 pub fn MemberList() -> Element {
+    let  context = use_context::<Signal<AppState>>();
     rsx! {
         div {
             id: "overview",
-            "this is order member view"
+            for person in &context.read().members {
+                div {
+                    "{person}"
+                }
+            }
         }
     }
 }
