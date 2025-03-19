@@ -88,3 +88,17 @@ main {
     font-weight: 600;
     color: #3b82f6;
 }
+
+div.member-input-container {
+    padding-block: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+        width: 100%;
+    }
+    button {
+        /* flex: 1; */
+        flex-basis: 100px;
+    }
+}

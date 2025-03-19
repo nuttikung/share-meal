@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use dioxus::{logger::tracing, prelude::*};
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
@@ -37,7 +37,7 @@ fn App() -> Element {
         Signal::new(AppState {
             view: String::from("orders"),
             orders: vec![],
-            members: vec![String::from("test")],
+            members: vec![],
         })
     });
 
@@ -124,10 +124,19 @@ pub fn OrderList() -> Element {
 
 #[component]
 pub fn MemberList() -> Element {
-    let  context = use_context::<Signal<AppState>>();
+    let context = use_context::<Signal<AppState>>();
     rsx! {
         div {
             id: "overview",
+
+            div {
+                "ชื่อคน"
+            }
+
+            div {
+                "จ่าย"
+            }
+
             for person in &context.read().members {
                 div {
                     "{person}"
@@ -139,14 +148,44 @@ pub fn MemberList() -> Element {
 
 #[component]
 pub fn MemberInput() -> Element {
+    let mut context = use_context::<Signal<AppState>>();
+    let mut person = use_signal(|| "".to_string());
+
+    // region :      --- Handle Input Change
+    let handle_person_input_change = move |event: Event<FormData>| {
+        person.set(event.value());
+    };
+    // end region :  --- Handle Input Change
+
+    // region :      --- Handle Add Person
+    let handle_add_person = move |_| {
+        let current_members_count = &context.read().members.len();
+        context
+            .write()
+            .members
+            .insert(*current_members_count, person.to_string());
+        person.set("".to_string());
+    };
+    // end region :  --- Handle Add Person
+
     rsx! {
-        input {
-            class: "input",
-            placeholder: "ระบุชื่อ",
-            value: "",
-            autofocus: "true",
-            // oninput: move |evt| draft.set(evt.value()),
-            // onkeydown
+        div {
+            class: "member-input-container",
+
+            input {
+                class: "input",
+                placeholder: "ระบุชื่อ",
+                value: "{person}",
+                autofocus: "true",
+                oninput: handle_person_input_change
+                // onkeydown
+            }
+
+            button {
+                class: "input",
+                onclick: handle_add_person,
+                "Add"
+            }
         }
     }
 }
