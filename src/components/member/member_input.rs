@@ -15,6 +15,10 @@ pub fn MemberInput() -> Element {
 
     // region :      --- Handle Add Person
     let handle_add_person = move |_| {
+        if person.read().is_empty() {
+            return;
+        }
+
         let current_members_count = &context.read().members.len();
         if !is_member_exist(&context.read().members, &person.read()) {
             context

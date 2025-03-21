@@ -119,5 +119,16 @@ div.member-overview {
 div.clear-container {
     display: flex;
     justify-content: center;
+    padding-block: 8px;
 
+    button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding-inline: 8px;
+    }
+}
+
+.danger {
+    color: red;
 }

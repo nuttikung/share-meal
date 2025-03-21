@@ -1,5 +1,8 @@
 use dioxus::prelude::*;
-use shared_meal::{components::member::{member_input::MemberInput, member_list::MemberList}, state::app_state::AppState};
+use shared_meal::{
+    components::{member::{member_clear_button::MemberClearButton, member_input::MemberInput, member_list::MemberList}, order::{order_input::OrderInput, order_list::OrderList}},
+    state::app_state::AppState,
+};
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
@@ -83,44 +86,15 @@ pub fn Overview() -> Element {
 
             if context().view == "orders" {
                 OrderList {}
+                div {
+                    OrderInput {}
+                }
             } else {
                 MemberList {}
                 div {
                     MemberInput {}
                     MemberClearButton {}
                 }
-            }
-
-        }
-    }
-}
-
-#[component]
-pub fn OrderList() -> Element {
-    rsx! {
-        div {
-            id: "overview",
-            "this is order list view"
-        }
-    }
-}
-
-#[component]
-pub fn MemberClearButton() -> Element {
-    let mut context = use_context::<Signal<AppState>>();
-
-    // region :      --- Handle Clear Members
-    let handle_clear_members = move |_| {
-        context.write().members.clear();
-    };
-    // end region :  --- Handle Clear Members
-
-    rsx! {
-        div {
-            class: "clear-container",
-            button {
-                onclick: handle_clear_members,
-                "ล้างรายชื่อทั้งหมด"
             }
 
         }
