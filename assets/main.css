@@ -102,3 +102,15 @@ div.member-input-container {
         flex-basis: 100px;
     }
 }
+
+div.member-overview {
+    display: flex;
+
+    div.member-list {
+        flex: 1;
+    }
+
+    div.price-payment {
+        flex: 1;
+    }
+}
