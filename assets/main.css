@@ -94,6 +94,7 @@ div.member-input-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 1em;
     input {
         width: 100%;
     }
@@ -113,4 +114,10 @@ div.member-overview {
     div.price-payment {
         flex: 1;
     }
+}
+
+div.clear-container {
+    display: flex;
+    justify-content: center;
+
 }

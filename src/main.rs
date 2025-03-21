@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use shared_meal::{components::member::{member_input::MemberInput, member_list::MemberList}, state::app_state::AppState};
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
@@ -9,27 +10,6 @@ fn main() {
     dioxus::launch(App);
 }
 // end region :  --- Main Function
-
-// region :      --- AppState
-type Member = String;
-type Members = Vec<String>;
-type Orders = Vec<Order>;
-
-#[derive(Clone)]
-struct Order {
-    id: i32,
-    title: String,
-    price: f32,
-    members: Members,
-}
-
-#[derive(Clone)]
-struct AppState {
-    view: String,
-    orders: Orders,
-    members: Members,
-}
-// end region :  --- AppState
 
 #[component]
 fn App() -> Element {
@@ -52,6 +32,8 @@ fn App() -> Element {
 pub fn Overview() -> Element {
     let mut context = use_context::<Signal<AppState>>();
 
+    let member_count = context.read().members.len();
+
     // region :      --- Handle Order Click
     let handleOrderClick = move |_| {
         context.write().view = String::from("orders");
@@ -72,7 +54,7 @@ pub fn Overview() -> Element {
                     div {
                         id: "overvie-item-total-person",
                         class: "overvie-item-total",
-                        "0"
+                        "{member_count}"
                     }
                 }
 
@@ -105,6 +87,7 @@ pub fn Overview() -> Element {
                 MemberList {}
                 div {
                     MemberInput {}
+                    MemberClearButton {}
                 }
             }
 
@@ -123,83 +106,23 @@ pub fn OrderList() -> Element {
 }
 
 #[component]
-pub fn MemberList() -> Element {
-    let context = use_context::<Signal<AppState>>();
-    rsx! {
-        div {
-            class: "member-overview",
-            id: "overview",
-
-            div {
-                class: "member-list",
-                "ชื่อคน"
-            }
-
-            div {
-                class: "price-payment",
-                "จ่าย"
-            }
-        }
-
-        for person in &context.read().members {
-            div {
-                class: "member-overview",
-                id: "overview",
-
-                div {
-                    class: "member-list",
-                    "{person}"
-                }
-
-                div {
-                    class: "price-payment",
-                    "จ่าย"
-                }
-            }
-        }
-    }
-}
-
-#[component]
-pub fn MemberInput() -> Element {
+pub fn MemberClearButton() -> Element {
     let mut context = use_context::<Signal<AppState>>();
-    let mut person = use_signal(|| "".to_string());
 
-    // region :      --- Handle Input Change
-    let handle_person_input_change = move |event: Event<FormData>| {
-        person.set(event.value());
+    // region :      --- Handle Clear Members
+    let handle_clear_members = move |_| {
+        context.write().members.clear();
     };
-    // end region :  --- Handle Input Change
-
-    // region :      --- Handle Add Person
-    let handle_add_person = move |_| {
-        let current_members_count = &context.read().members.len();
-        context
-            .write()
-            .members
-            .insert(*current_members_count, person.to_string());
-        person.set("".to_string());
-    };
-    // end region :  --- Handle Add Person
+    // end region :  --- Handle Clear Members
 
     rsx! {
         div {
-            class: "member-input-container",
-
-            input {
-                class: "input",
-                placeholder: "ระบุชื่อ",
-                value: "{person}",
-                autofocus: "true",
-                oninput: handle_person_input_change
-                // onkeydown
-            }
-
+            class: "clear-container",
             button {
-                class: "input",
-                onclick: handle_add_person,
-                "Add"
+                onclick: handle_clear_members,
+                "ล้างรายชื่อทั้งหมด"
             }
+
         }
     }
 }
