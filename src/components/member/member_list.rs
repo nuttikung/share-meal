@@ -27,7 +27,7 @@ pub fn MemberList() -> Element {
         }
 
         for person in &context.read().members {
-            MemberRecord { member: "{person}"}
+            MemberRecord { name: "{person.name}", paid: person.paid }
         }
 
     }

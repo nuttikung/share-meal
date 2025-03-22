@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::{components::member::helper::is_member_exist, state::app_state::AppState};
+use crate::{
+    components::member::helper::is_member_exist,
+    state::{app_state::AppState, member::Member},
+};
 
 #[component]
 pub fn MemberInput() -> Element {
@@ -21,10 +24,15 @@ pub fn MemberInput() -> Element {
 
         let current_members_count = &context.read().members.len();
         if !is_member_exist(&context.read().members, &person.read()) {
+            let new_member = Member {
+                name: person.to_string(),
+                paid: false,
+            };
+
             context
                 .write()
                 .members
-                .insert(*current_members_count, person.to_string());
+                .insert(*current_members_count, new_member);
         }
         person.set("".to_string());
     };
