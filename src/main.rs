@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_material_icons::MaterialIconStylesheet;
 use shared_meal::{
     components::{
         member::{
@@ -33,6 +34,7 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        MaterialIconStylesheet {}
         Overview {}
     }
 }
@@ -45,11 +47,11 @@ pub fn Overview() -> Element {
 
     // region :      --- Handle Order Click
     let handleOrderClick = move |_| {
-        context.write().view = String::from("orders");
+        context.write().view = "orders".to_string();
     };
 
     let handleMemberClick = move |_| {
-        context.write().view = String::from("members");
+        context.write().view = "members".to_string();
     };
     // end region :  --- Handle Order Click
 

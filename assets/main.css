@@ -4,12 +4,12 @@ body {
     /* color: #ffffff; */
     font-family: monospace, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; */
-    margin: 20px;
+    margin: 0px;
     color: #000000;
 }
 
 main {
-    margin: 10px auto;
+    margin: 0px auto;
     max-width: 420px;
     background: whitesmoke;
 }

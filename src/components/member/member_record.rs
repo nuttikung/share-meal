@@ -1,5 +1,5 @@
 use dioxus::{logger::tracing, prelude::*};
-// use dioxus_free_icons::Icon;
+use dioxus_material_icons::MaterialIcon;
 
 use crate::state::app_state::AppState;
 
@@ -11,30 +11,22 @@ pub struct MemberRecordProps {
 
 #[component]
 pub fn MemberRecord(props: MemberRecordProps) -> Element {
-    // find the price for one person
-    let context = use_context::<Signal<AppState>>();
+    let mut context = use_context::<Signal<AppState>>();
     let member_name = String::clone(&props.name);
 
-    tracing::debug!("{} {}", props.name, props.paid);
+    // find the price for one person
+    let bind_context = context.read();
+    let current_member = bind_context.members.iter().find(|m| m.name == member_name);
     let x = 30;
+    tracing::debug!("{:?}", current_member);
 
     // region :      --- Handle Payment Click
     let handle_payment_click = move |_| {
-        let temp_context = context.read();
-        let current_member = temp_context
-            .members
-            .iter()
-            .find(|m| m.name.to_string() == member_name.to_string());
-
-        if current_member.is_none() {
-            return
-        }
-
-        let m = current_member;
-
-        m.unwrap().clone().paid = !m.unwrap().paid;
-
-        tracing::debug!("{:?}", current_member);
+        context.write().members.iter_mut().for_each(|m| {
+            if m.name == member_name {
+                m.paid = !m.paid;
+            }
+        });
     };
     // end region :  --- Handle Payment Click
 
@@ -58,9 +50,9 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
                 onclick: handle_payment_click,
 
                 if props.paid {
-                    "จ่ายแล้ว"
+                    MaterialIcon { name: "check" }
                 } else {
-                    "ยังไม่จ่าย"
+                    MaterialIcon { name: "clear" }
                 }
             }
         }
