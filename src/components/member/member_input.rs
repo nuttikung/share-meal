@@ -13,8 +13,8 @@ pub fn MemberInput() -> Element {
     };
     // end region :  --- Handle Input Change
 
-    // region :      --- Handle Add Person
-    let handle_add_person = move |_| {
+    // region :      --- Add Member
+    let mut add_member = move || {
         if person.read().is_empty() {
             return;
         }
@@ -28,7 +28,21 @@ pub fn MemberInput() -> Element {
         }
         person.set("".to_string());
     };
+    // end region :  --- Add Member
+
+    // region :      --- Handle Add Person
+    let handle_add_person = move |_| {
+        add_member();
+    };
     // end region :  --- Handle Add Person
+
+    // region :      --- Handle Enter Press
+    let handle_enter_press = move |event: Event<KeyboardData>| {
+        if event.code().to_string() == "Enter".to_string() {
+            add_member();
+        }
+    };
+    // end region :  --- Handle Enter Press
 
     rsx! {
         div {
@@ -39,8 +53,8 @@ pub fn MemberInput() -> Element {
                 placeholder: "ระบุชื่อ",
                 value: "{person}",
                 autofocus: "true",
-                oninput: handle_person_input_change
-                // onkeydown
+                oninput: handle_person_input_change,
+                onkeydown: handle_enter_press
             }
 
             button {

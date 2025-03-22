@@ -4,22 +4,39 @@ use dioxus::prelude::*;
 pub fn OrderInput() -> Element {
     rsx! {
         div {
-            class: "member-input-container",
+            class: "order-input-container",
 
-            input {
-                class: "input",
-                placeholder: "ระบุรายการ",
-                // value: "{person}",
-                autofocus: "true",
-                // oninput: handle_person_input_change
-                // onkeydown
+            div {
+                class: "order-input",
+                input {
+                    placeholder: "ระบุรายการ",
+                    // value: "{person}",
+                    autofocus: "true",
+                    // oninput: handle_person_input_change
+                    // onkeydown
+                }
             }
 
+            div {
+                class: "order-input",
+                input {
+                    placeholder: "ราคา",
+                    // value: "{person}",
+                    autofocus: "true",
+                    // oninput: handle_person_input_change
+                    // onkeydown
+                }
+            }
+
+            // Add Member to share
+
             button {
-                class: "input",
+                // class: "input",
                 // onclick: handle_add_person,
                 "Add"
             }
+
+            // Calculator here
         }
     }
 }

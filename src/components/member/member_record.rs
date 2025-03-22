@@ -1,23 +1,26 @@
 use dioxus::prelude::*;
 
-use crate::{components::member::member_record::MemberRecord, state::app_state::AppState};
+#[derive(PartialEq, Props, Clone)]
+pub struct MemberRecordProps {
+    member: String,
+}
 
 #[component]
-pub fn MemberList() -> Element {
-    let context = use_context::<Signal<AppState>>();
-    rsx! {
+pub fn MemberRecord(props:MemberRecordProps) -> Element {
+    // find the price for one person
+    rsx!(
         div {
             class: "member-overview",
             id: "overview",
 
             div {
                 class: "member-list",
-                "ชื่อคน"
+                "{props.member}"
             }
 
             div {
                 class: "price-payment",
-                "ราคา"
+                "xxx"
             }
 
             div {
@@ -25,10 +28,5 @@ pub fn MemberList() -> Element {
                 "จ่าย"
             }
         }
-
-        for person in &context.read().members {
-            MemberRecord { member: "{person}"}
-        }
-
-    }
+    )
 }

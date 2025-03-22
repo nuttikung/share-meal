@@ -1,6 +1,12 @@
 use dioxus::prelude::*;
 use shared_meal::{
-    components::{member::{member_clear_button::MemberClearButton, member_input::MemberInput, member_list::MemberList}, order::{order_input::OrderInput, order_list::OrderList}},
+    components::{
+        member::{
+            member_clear_button::MemberClearButton, member_input::MemberInput,
+            member_list::MemberList,
+        },
+        order::{order_input::OrderInput, order_list::OrderList},
+    },
     state::app_state::AppState,
 };
 

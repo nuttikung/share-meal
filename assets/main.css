@@ -129,6 +129,42 @@ div.clear-container {
     }
 }
 
+div.order-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    div.order-input {
+        flex: 1;
+        display: flex;
+        margin-inline: 8px;
+
+        input {
+            width: 100%;
+            outline: none;
+            border: 1px solid #dadada;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f3f7fe;
+            transition: 0.3s;
+            color: #3b82f6;
+        }
+
+        button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding-inline: 8px;
+            outline: none;
+            border: 1px solid #dadada;
+            border-radius: 5px;
+            background-color: #f3f7fe;
+            transition: 0.3s;
+            color: #3b82f6;
+        }
+    }
+}
+
 .danger {
     color: red;
 }
