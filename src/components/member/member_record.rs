@@ -1,4 +1,4 @@
-use dioxus::{logger::tracing, prelude::*};
+use dioxus::prelude::*;
 
 use crate::state::app_state::AppState;
 
@@ -17,7 +17,6 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
     let bind_context = context.read();
     let current_member = bind_context.members.iter().find(|m| m.name == member_name);
     let x = 30;
-    tracing::debug!("{:?}", current_member);
 
     // region :      --- Handle Payment Click
     let handle_payment_click = move |_| {

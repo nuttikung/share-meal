@@ -1,9 +1,14 @@
 use dioxus::prelude::*;
 
+use crate::{components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState};
+
 #[component]
 pub fn OrderInput() -> Element {
+    let context = use_context::<Signal<AppState>>();
+    let all_members = context.read().members.clone();
     let mut order_name = use_signal(|| "".to_string());
     let mut price = use_signal(|| 0.0);
+    let mut selected_member = use_signal(|| vec![] as Vec<String>);
 
     // region :      --- Handle Order Name Input
     let handle_order_name_change = move |event:Event<FormData>| {
@@ -33,7 +38,7 @@ pub fn OrderInput() -> Element {
         div {
             class: "m-2 space-y-12",
             div {
-                class: "border-b border-t border-gray-900/10 pt-4 pb-4",
+                class: "pt-4 pb-4",
                 div {
                     class: "grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6",
                     div {
@@ -86,19 +91,35 @@ pub fn OrderInput() -> Element {
                             }
                         }
                     }
+                    div {
+                        class: "sm:col-span-12",
+                        fieldset {
+                            legend {
+                                class: "text-base font-semibold text-gray-900",
+                                "คนจ่าย"
+                            }
+
+                            div {
+                                class: "mt-4 divide-y divide-gray-200 border-t border-b border-gray-200",
+                                for person in all_members {
+                                    OrderMemberCheckBox {
+                                        name: "{person.name}",
+                                        selected: !selected_member.read().iter().find(|m| **m == person.name).is_none(),
+                                        onselect: move |event:Event<FormData>| {
+                                            // Implement Add and Remove Shared Member here.
+                                            if event.data().value() == "true".to_string() {
+                                                selected_member.write().push(person.name.to_string());
+                                            } else {
+                                                // selected_member.write().remove(index)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-
-        div {
-            class: "order-input-container",
-            // Add Member to share
-            button {
-                // class: "input",
-                // onclick: handle_add_person,
-                "Add"
-            }
-            // Calculator here
         }
     }
 }

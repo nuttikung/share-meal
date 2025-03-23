@@ -78,6 +78,7 @@ pub fn MemberInput() -> Element {
                 }
             }
             button {
+                r#type: "button",
                 class: "cursor-pointer flex shrink-0 items-center gap-x-1.5 rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500",
                 onclick: handle_add_person,
                 span {
