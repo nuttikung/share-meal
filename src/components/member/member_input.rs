@@ -55,7 +55,7 @@ pub fn MemberInput() -> Element {
 
     rsx! {
         div {
-            class: "m-2 flex",
+            class: "m-2 py-2 flex",
             div {
                 class: "-mr-px grid grow grid-cols-1 focus-within:relative",
                 input {
@@ -81,10 +81,10 @@ pub fn MemberInput() -> Element {
                 class: "cursor-pointer flex shrink-0 items-center gap-x-1.5 rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500",
                 onclick: handle_add_person,
                 span {
-                    class: "pointer-events-none col-start-1 row-start-1 ml-3 mr-3 size-5 self-center text-gray-400 sm:size-4",
+                    class: "pointer-events-none flex col-start-1 row-start-1 ml-3 mr-3 size-5 self-center items-center text-gray-400 sm:size-4",
                     MaterialIcon {
                         name: "add",
-                        size: 16,
+                        size: 20,
                     }
                 }
             }
