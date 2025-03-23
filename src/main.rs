@@ -7,12 +7,14 @@ use shared_meal::{
             member_list::MemberList,
         },
         order::{order_input::OrderInput, order_list::OrderList},
+        tab::tab_view_switcher::TabViewSwitcher,
     },
     state::app_state::AppState,
 };
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
+const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
 // region :      --- Main Function
@@ -34,6 +36,7 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
         MaterialIconStylesheet {}
         Overview {}
     }
@@ -41,19 +44,9 @@ fn App() -> Element {
 
 #[component]
 pub fn Overview() -> Element {
-    let mut context = use_context::<Signal<AppState>>();
+    let context = use_context::<Signal<AppState>>();
 
     let member_count = context.read().members.len();
-
-    // region :      --- Handle Order Click
-    let handleOrderClick = move |_| {
-        context.write().view = "orders".to_string();
-    };
-
-    let handleMemberClick = move |_| {
-        context.write().view = "members".to_string();
-    };
-    // end region :  --- Handle Order Click
 
     rsx! {
         main {
@@ -80,17 +73,7 @@ pub fn Overview() -> Element {
                 }
             }
 
-
-            div { class: "radio-inputs",
-                label { class: "radio",
-                    input { r#type: "radio", name: "radio", checked: context().view == "orders", onclick: handleOrderClick}
-                    span { class: "name", "รายการ" }
-                }
-                label { class: "radio",
-                    input { r#type: "radio", name: "radio", checked: context().view == "members", onclick: handleMemberClick}
-                    span { class: "name", "คนจ่าย" }
-                }
-            }
+            TabViewSwitcher {}
 
             if context().view == "orders" {
                 OrderList {}
