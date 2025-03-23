@@ -8,11 +8,7 @@ body {
     color: #000000;
 }
 
-main {
-    margin: 0px auto;
-    max-width: 420px;
-    background: whitesmoke;
-}
+main { }
 
 #overview {
     display: flex;

@@ -5,17 +5,15 @@ use shared_meal::{
         member::{
             member_clear_button::MemberClearButton, member_input::MemberInput,
             member_list::MemberList,
-        },
-        order::{order_input::OrderInput, order_list::OrderList},
-        tab::tab_view_switcher::TabViewSwitcher,
+        }, order::{order_input::OrderInput, order_list::OrderList}, stats::stats_overview::StatsOverview, tab::tab_view_switcher::TabViewSwitcher
     },
     state::app_state::AppState,
 };
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
-const MAIN_CSS: Asset = asset!("/assets/main.css");
+// const MAIN_CSS: Asset = asset!("/assets/main.css");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
-const HEADER_SVG: Asset = asset!("/assets/header.svg");
+// const HEADER_SVG: Asset = asset!("/assets/header.svg");
 
 // region :      --- Main Function
 fn main() {
@@ -35,7 +33,7 @@ fn App() -> Element {
 
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
+        // document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
         MaterialIconStylesheet {}
         Overview {}
@@ -45,49 +43,25 @@ fn App() -> Element {
 #[component]
 pub fn Overview() -> Element {
     let context = use_context::<Signal<AppState>>();
-
-    let member_count = context.read().members.len();
+    let current_view = context().view;
 
     rsx! {
         main {
+            class: "bg-neutral-50",
             div {
-                id: "overview",
-                div {
-                    class: "overvie-item",
-                    "จำนวนคน"
-                    div {
-                        id: "overvie-item-total-person",
-                        class: "overvie-item-total",
-                        "{member_count}"
-                    }
-                }
+                class: "mx-auto max-w-5xl",
+                StatsOverview {}
+                TabViewSwitcher {}
 
-                div {
-                    class: "overvie-item",
-                    "ราคารวม"
-                    div {
-                        id: "overvie-item-total-price",
-                        class: "overvie-item-total",
-                        "0"
-                    }
-                }
-            }
-
-            TabViewSwitcher {}
-
-            if context().view == "orders" {
-                OrderList {}
-                div {
+                if current_view == "orders" {
+                    OrderList {}
                     OrderInput {}
-                }
-            } else {
-                MemberList {}
-                div {
+                } else {
+                    MemberList {}
                     MemberInput {}
                     MemberClearButton {}
                 }
             }
-
         }
     }
 }
