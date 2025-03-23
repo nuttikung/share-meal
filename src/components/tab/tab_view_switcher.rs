@@ -18,36 +18,12 @@ pub fn TabViewSwitcher() -> Element {
         event.prevent_default();
         context.write().view = "members".to_string();
     };
-
-    let handle_select_tab = move |event: Event<FormData>| {
-        let new_tab = event.data().value();
-        context.write().view = new_tab;
-    };
     // end region :  --- Handle Switch Tab
 
     rsx! {
         div {
-            div { class: "grid grid-cols-1 sm:hidden ml-2 mr-2",
-                select {
-                    onchange: handle_select_tab,
-                    // onselect: handle_select_tab,
-                    aria_label: "Select a tab",
-                    class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500",
-                    option {
-                        value: "orders",
-                        selected: current_tab_value.to_string() == "orders".to_string(),
-                        "รายการ"
-                    }
-                    option {
-                        value: "members",
-                        selected: current_tab_value.to_string() == "members".to_string(),
-                        "คนจ่าย"
-                    }
-                }
-            }
-
             div {
-                class: "hidden sm:block",
+                class: "block",
                 div {
                     class: "border-b border-gray-200",
                     nav { "aria-label": "Tabs", class: "-mb-px flex space-x-8",
