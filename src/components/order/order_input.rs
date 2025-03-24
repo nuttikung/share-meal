@@ -1,4 +1,4 @@
-use dioxus::{logger::tracing, prelude::*};
+use dioxus::prelude::*;
 
 use crate::{components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState};
 
@@ -40,9 +40,9 @@ pub fn OrderInput() -> Element {
             div {
                 class: "pt-4 pb-4",
                 div {
-                    class: "grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6",
+                    class: "grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12",
                     div {
-                        class: "sm:col-span-3",
+                        class: "sm:col-span-6",
                         label {
                             class: "block text-sm/6 font-medium text-gray-900",
                             for: "order-name",
@@ -62,7 +62,7 @@ pub fn OrderInput() -> Element {
                         }
                     }
                     div {
-                        class: "sm:col-span-3",
+                        class: "sm:col-span-6",
                         label {
                             class: "block text-sm/6 font-medium text-gray-900",
                             for: "order-price",
@@ -99,16 +99,20 @@ pub fn OrderInput() -> Element {
                                 "คนจ่าย"
                             }
 
+                            if all_members.len() == 0 {
+                                div {
+                                    class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
+                                    "ยังไม่มีคนจ่าย"
+                                }
+                            }
+
                             div {
-                                class: "mt-4 divide-y divide-gray-200 border-t border-b border-gray-200",
                                 for person in all_members {
                                     OrderMemberCheckBox {
                                         name: "{person.name}",
                                         selected: !selected_member.read().iter().find(|m| **m == person.name).is_none(),
-                                        onselect: move |event:Event<FormData>| {
-                                            tracing::debug!("{}",event.data().value());
-                                            // Implement Add and Remove Shared Member here.
-                                            if event.data().value() == "true".to_string() {
+                                        onselect: move |new_value| {
+                                            if new_value {
                                                 selected_member.write().push(person.name.to_string());
                                             } else {
                                                 let index = selected_member.read().iter().position(|m| *m == person.name).unwrap();
