@@ -22,7 +22,7 @@ pub fn OrderMemberCheckBox(props: OrderMemberCheckBoxProps) -> Element {
                 class: "min-w-0 flex-1 text-sm/6",
                 label {
                     class: "font-medium text-gray-900 select-none",
-                    for: "person-1",
+                    for: "{props.name}",
                     "{props.name}"
                 }
             }
@@ -31,11 +31,11 @@ pub fn OrderMemberCheckBox(props: OrderMemberCheckBoxProps) -> Element {
                 div {
                     class: "group grid size-4 grid-cols-1",
                     input {
-                        name: "person-1",
-                        type: "checkbox",
-                        checked: "false",
+                        id: "{props.name}",
                         class: "col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-blue-600 checked:bg-blue-600 indeterminate:border-blue-600 indeterminate:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto",
-                        id: "person-1",
+                        name: "{props.name}",
+                        r#type: "checkbox",
+                        checked: "{props.selected}",
                         onchange: handle_check_member,
                         oninput: handle_check_member
                     }

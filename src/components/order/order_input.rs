@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use dioxus::{logger::tracing, prelude::*};
 
 use crate::{components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState};
 
@@ -106,11 +106,13 @@ pub fn OrderInput() -> Element {
                                         name: "{person.name}",
                                         selected: !selected_member.read().iter().find(|m| **m == person.name).is_none(),
                                         onselect: move |event:Event<FormData>| {
+                                            tracing::debug!("{}",event.data().value());
                                             // Implement Add and Remove Shared Member here.
                                             if event.data().value() == "true".to_string() {
                                                 selected_member.write().push(person.name.to_string());
                                             } else {
-                                                // selected_member.write().remove(index)
+                                                let index = selected_member.read().iter().position(|m| *m == person.name).unwrap();
+                                                selected_member.write().remove(index);
                                             }
                                         }
                                     }
