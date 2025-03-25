@@ -1,6 +1,8 @@
 use dioxus::prelude::*;
 
-use crate::{components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState};
+use crate::{
+    components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState,
+};
 
 #[component]
 pub fn OrderInput() -> Element {
@@ -11,28 +13,45 @@ pub fn OrderInput() -> Element {
     let mut selected_member = use_signal(|| vec![] as Vec<String>);
 
     // region :      --- Handle Order Name Input
-    let handle_order_name_change = move |event:Event<FormData>| {
+    let handle_order_name_change = move |event: Event<FormData>| {
         order_name.set(event.value());
     };
     // end region :  --- Handle Order Name Input
 
     // region :      --- Handle Price Input
-    let handle_price_change = move |event:Event<FormData>| {
+    let handle_price_change = move |event: Event<FormData>| {
         let input_value = event.data().value().parse::<f64>();
         // Error
         if input_value.is_err() {
-            return
+            return;
         }
 
         let new_price = input_value.unwrap();
         // Price should not below 0
         if new_price.is_sign_negative() {
-            return
+            return;
         }
 
         price.set(new_price);
     };
     // end region :  --- Handle Price Input
+
+    // region :      --- Handle Select All Member
+    let handle_select_all = move |_| {
+        let members: Vec<String> = context
+            .read()
+            .members
+            .clone()
+            .iter()
+            .map(|m| m.name.clone())
+            .collect();
+        if members.len() == selected_member.read().len() {
+            selected_member.set(Vec::new());
+        } else {
+            selected_member.set(members);
+        }
+    };
+    // end region :  --- Handle Select All Member
 
     rsx! {
         div {
@@ -99,15 +118,8 @@ pub fn OrderInput() -> Element {
                                 "คนจ่าย"
                             }
 
-                            if all_members.len() == 0 {
-                                div {
-                                    class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                                    "ยังไม่มีคนจ่าย"
-                                }
-                            }
-
                             div {
-                                for person in all_members {
+                                for person in all_members.clone() {
                                     OrderMemberCheckBox {
                                         name: "{person.name}",
                                         selected: !selected_member.read().iter().find(|m| **m == person.name).is_none(),
@@ -120,6 +132,20 @@ pub fn OrderInput() -> Element {
                                             }
                                         }
                                     }
+                                }
+                            }
+
+                            if all_members.len() == 0 {
+                                div {
+                                    class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
+                                    "ยังไม่มีคนจ่าย"
+                                }
+                            } else {
+                                button {
+                                    r#type: "button",
+                                    class: "cursor-pointer rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
+                                    onclick: handle_select_all,
+                                    "เลือกทุกคน"
                                 }
                             }
                         }

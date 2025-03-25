@@ -5,7 +5,10 @@ use shared_meal::{
         member::{
             member_clear_button::MemberClearButton, member_input::MemberInput,
             member_list::MemberList,
-        }, order::{order_input::OrderInput, order_list::OrderList}, stats::stats_overview::StatsOverview, tab::tab_view_switcher::TabViewSwitcher
+        },
+        order::{order_input::OrderInput, order_list::OrderList},
+        stats::stats_overview::StatsOverview,
+        tab::tab_view_switcher::TabViewSwitcher,
     },
     state::app_state::AppState,
 };

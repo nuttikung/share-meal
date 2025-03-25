@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use dioxus_material_icons::MaterialIcon;
-use hextool::{Hex, Convert};
+use hextool::{Convert, Hex};
 
 #[derive(PartialEq, Props, Clone, Debug)]
 pub struct OrderMemberCheckBoxProps {
@@ -14,7 +14,7 @@ pub fn OrderMemberCheckBox(props: OrderMemberCheckBoxProps) -> Element {
     let OrderMemberCheckBoxProps {
         name,
         selected,
-        onselect
+        onselect,
     } = props;
 
     // Find function convert name to hex or hue color
