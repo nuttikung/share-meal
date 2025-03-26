@@ -1,16 +1,17 @@
 use dioxus::prelude::*;
 
 use crate::{
-    components::order::order_member_check_box::OrderMemberCheckBox, state::app_state::AppState,
+    components::order::order_member_check_box::OrderMemberCheckBox,
+    state::{app_state::AppState, member::Member, order::Order},
 };
 
 #[component]
 pub fn OrderInput() -> Element {
-    let context = use_context::<Signal<AppState>>();
+    let mut context = use_context::<Signal<AppState>>();
     let all_members = context.read().members.clone();
     let mut order_name = use_signal(|| "".to_string());
     let mut price = use_signal(|| 0.0);
-    let mut selected_member = use_signal(|| vec![] as Vec<String>);
+    let mut selected_member = use_signal(|| vec![] as Vec<Member>);
 
     // region :      --- Handle Order Name Input
     let handle_order_name_change = move |event: Event<FormData>| {
@@ -38,12 +39,12 @@ pub fn OrderInput() -> Element {
 
     // region :      --- Handle Select All Member
     let handle_select_all = move |_| {
-        let members: Vec<String> = context
+        let members: Vec<Member> = context
             .read()
             .members
             .clone()
             .iter()
-            .map(|m| m.name.clone())
+            .map(|m| m.clone())
             .collect();
         if members.len() == selected_member.read().len() {
             selected_member.set(Vec::new());
@@ -52,6 +53,28 @@ pub fn OrderInput() -> Element {
         }
     };
     // end region :  --- Handle Select All Member
+
+    // region :      --- Handle Add Order
+    let handle_add_order = move |_| {
+        if order_name.read().is_empty() {
+            return;
+        }
+
+        // TODO: uuid function support 3 platforms
+        let id = "1111".to_string();
+        let new_order = Order {
+            id,
+            title: order_name(),
+            price: price(),
+            members: selected_member(),
+        };
+        context.write().orders.push(new_order);
+
+        order_name.set("".to_string());
+        selected_member.set(Vec::new());
+        price.set(0.0);
+    };
+    // end region :  --- Handle Add Order
 
     rsx! {
         div {
@@ -122,32 +145,48 @@ pub fn OrderInput() -> Element {
                                 for person in all_members.clone() {
                                     OrderMemberCheckBox {
                                         name: "{person.name}",
-                                        selected: !selected_member.read().iter().find(|m| **m == person.name).is_none(),
+                                        selected: !selected_member.read().iter().find(|m| m.name == person.name).is_none(),
                                         onselect: move |new_value| {
-                                            if new_value {
-                                                selected_member.write().push(person.name.to_string());
-                                            } else {
-                                                let index = selected_member.read().iter().position(|m| *m == person.name).unwrap();
-                                                selected_member.write().remove(index);
-                                            }
+                                            selected_member.with_mut(|members| {
+                                                if new_value {
+                                                    members.push(person.clone());
+                                                } else {
+                                                    if let Some(index) = members.iter().position(|m| m.name == person.name) {
+                                                        members.remove(index);
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                }
+
+                                if all_members.len() == 0 {
+                                    div {
+                                        class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
+                                        "ยังไม่มีคนจ่าย"
+                                    }
+                                } else {
+                                    div {
+                                        class: "relative inline-flex gap-3 py-2 mr-2",
+                                        button {
+                                            r#type: "button",
+                                            class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
+                                            onclick: handle_select_all,
+                                            "เลือกทุกคน"
                                         }
                                     }
                                 }
                             }
+                        }
+                    }
 
-                            if all_members.len() == 0 {
-                                div {
-                                    class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                                    "ยังไม่มีคนจ่าย"
-                                }
-                            } else {
-                                button {
-                                    r#type: "button",
-                                    class: "cursor-pointer rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
-                                    onclick: handle_select_all,
-                                    "เลือกทุกคน"
-                                }
-                            }
+                    div {
+                        class: "sm:col-span-12",
+                        button {
+                            r#type: "button",
+                            class: "cursor-pointer w-full rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
+                            onclick: handle_add_order,
+                            "เพิ่มรายการ"
                         }
                     }
                 }

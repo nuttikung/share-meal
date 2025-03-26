@@ -2,9 +2,9 @@ use super::member::Members;
 
 #[derive(Clone)]
 pub struct Order {
-    pub id: i32,
+    pub id: String,
     pub title: String,
-    pub price: f32,
+    pub price: f64,
     pub members: Members,
 }
 
