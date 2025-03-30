@@ -28,11 +28,6 @@ pub fn OrderInput() -> Element {
         }
 
         let new_price = input_value.unwrap();
-        // Price should not below 0
-        if new_price.is_sign_negative() {
-            return;
-        }
-
         price.set(new_price);
     };
     // end region :  --- Handle Price Input

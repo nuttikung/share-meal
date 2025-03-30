@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::state::app_state::AppState;
+use crate::{components::order::order_record::OrderRecord, state::app_state::AppState};
 
 #[component]
 pub fn OrderList() -> Element {
@@ -43,27 +43,18 @@ pub fn OrderList() -> Element {
                                         td {
                                             class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
                                             colspan: 3,
-                                            "ยังไม่มีคนจ่าย"
+                                            "ยังไม่รายการ"
                                         }
                                     }
                                 }
 
                                 for order in &context.read().orders {
-                                    tr {
-                                        td {
-                                            class: "px-3 py-4 text-sm whitespace-nowrap text-gray-500",
-                                            "{order.title}"
-                                        }
-                                        td {
-                                            class: "px-3 py-4 text-sm whitespace-nowrap text-gray-500",
-                                            "{order.price}"
-                                        }
-                                        td {
-                                            class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                                            "ยังไม่มีคนจ่าย"
-                                        }
+                                    OrderRecord {
+                                        id: "{order.id}",
+                                        title: "{order.title}",
+                                        price: order.price,
+                                        members: order.members.clone()
                                     }
-                                    // MemberRecord { name: "{person.name}", paid: person.paid }
                                 }
                             }
                         }

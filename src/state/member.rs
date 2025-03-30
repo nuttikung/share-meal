@@ -1,6 +1,6 @@
 // pub type Member = String;
 
-#[derive(Clone, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 pub struct Member {
     pub name: String,
     pub paid: bool,

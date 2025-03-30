@@ -64,7 +64,6 @@ pub fn MemberInput() -> Element {
                     type: "name",
                     placeholder: "ระบุชื่อ",
                     value: "{person}",
-                    autofocus: "true",
                     autocomplete: "off",
                     oninput: handle_person_input_change,
                     onkeydown: handle_enter_press
