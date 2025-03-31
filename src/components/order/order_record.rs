@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use dioxus::prelude::*;
 
 use crate::state::member::Members;
@@ -22,7 +20,7 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
     } = props;
 
     let price_per_one = price / members.len() as f64;
-    let round_up_price = format!("{:.2}" , price_per_one);
+    let round_up_price = format!("{:.2}", price_per_one);
 
     rsx!(
         tr {

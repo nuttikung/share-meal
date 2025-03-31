@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::{helper::price::round_up_float_to_two_precision, state::{app_state::AppState, order::Order}};
+use crate::{
+    helper::price::round_up_float_to_two_precision,
+    state::{app_state::AppState, order::Order},
+};
 
 #[component]
 pub fn StatsOverview() -> Element {
@@ -32,10 +35,10 @@ pub fn StatsOverview() -> Element {
     }
 }
 
-fn calculate_total_price (orders: Vec<Order>) -> f64 {
+fn calculate_total_price(orders: Vec<Order>) -> f64 {
     let mut total: f64 = 0.0;
     for o in orders {
         total += o.price as f64;
     }
-    return total
+    return total;
 }
