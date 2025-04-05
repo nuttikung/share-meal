@@ -1,6 +1,6 @@
-use dioxus::prelude::*;
+use dioxus::{logger::tracing, prelude::*};
 
-use crate::state::app_state::AppState;
+use crate::state::{app_state::AppState, member::Members};
 
 #[derive(PartialEq, Props, Clone)]
 pub struct MemberRecordProps {
@@ -13,10 +13,20 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
     let mut context = use_context::<Signal<AppState>>();
     let member_name = String::clone(&props.name);
 
-    // find the price for one person
     let bind_context = context.read();
-    let current_member = bind_context.members.iter().find(|m| m.name == member_name);
-    let x = 30;
+    let price: f64 = bind_context
+        .orders
+        .iter()
+        .filter(|order| has_name_in(&order.members, &member_name))
+        .map(|o| {
+            if o.members.len() == 0 {
+                return 0 as f64;
+            } else {
+                return o.price / o.members.len() as f64;
+            }
+        })
+        .sum();
+    let round_up_price = format!("{:.2}", price);
 
     // region :      --- Handle Payment Click
     let handle_payment_click = move |_| {
@@ -36,7 +46,7 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
             }
             td {
                 class: "px-3 py-4 text-sm whitespace-nowrap text-gray-500",
-                "{x}"
+                "{round_up_price}"
             }
             td {
                 class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
@@ -56,4 +66,31 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
             }
         }
     )
+}
+
+/// Utility function to check if name is in the Vec<Member> or Members
+///
+/// `true` when name is included,
+///
+/// `false` when name is not included
+///
+/// # Examples
+///
+/// Basic usage:
+///
+/// ```
+/// let members = vec![{ name: "a", paid: false },{ name: "b", paid: false }]
+/// assert_eq!(has_self_in(&members, "a"), true);
+/// assert_eq!(has_self_in(&members, "c"), false);
+/// ```
+fn has_name_in(members: &Members, name: &str) -> bool {
+    let mut found: bool = false;
+    for n in members {
+        if n.name == name {
+            found = true;
+            break;
+        }
+    }
+
+    return found;
 }

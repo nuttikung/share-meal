@@ -1,6 +1,6 @@
 use super::member::Members;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Order {
     pub id: String,
     pub title: String,
