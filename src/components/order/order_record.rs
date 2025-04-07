@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::state::member::Members;
+use crate::{helper::price::round_up_float_to_two_precision, state::{member::Members, order::Order}};
 
 #[derive(PartialEq, Props, Clone)]
 pub struct OrderRecordProps {
@@ -13,14 +13,20 @@ pub struct OrderRecordProps {
 #[component]
 pub fn OrderRecord(props: OrderRecordProps) -> Element {
     let OrderRecordProps {
-        id: _,
+        id,
         title,
         price,
         members,
     } = props;
 
-    let price_per_one = price / members.len() as f64;
-    let round_up_price = format!("{:.2}", price_per_one);
+    let order = Order {
+        id: id.clone(),
+        title: title.clone(),
+        price,
+        members
+    };
+    let price_per_member = order.calculate_price_per_member();
+    let round_up_price = round_up_float_to_two_precision(price_per_member);
 
     rsx!(
         tr {

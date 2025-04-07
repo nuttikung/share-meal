@@ -1,6 +1,6 @@
-use dioxus::{logger::tracing, prelude::*};
+use dioxus::prelude::*;
 
-use crate::state::{app_state::AppState, member::Members};
+use crate::{helper::price::round_up_float_to_one_precision, state::app_state::AppState};
 
 #[derive(PartialEq, Props, Clone)]
 pub struct MemberRecordProps {
@@ -11,22 +11,15 @@ pub struct MemberRecordProps {
 #[component]
 pub fn MemberRecord(props: MemberRecordProps) -> Element {
     let mut context = use_context::<Signal<AppState>>();
-    let member_name = String::clone(&props.name);
-
-    let bind_context = context.read();
-    let price: f64 = bind_context
+    let member_name = props.name.to_string();
+    let price: f64 = context
+        .read()
         .orders
         .iter()
-        .filter(|order| has_name_in(&order.members, &member_name))
-        .map(|o| {
-            if o.members.len() == 0 {
-                return 0 as f64;
-            } else {
-                return o.price / o.members.len() as f64;
-            }
-        })
+        .filter(|o| o.has_member_in(&member_name))
+        .map(|o| o.calculate_price_per_member())
         .sum();
-    let round_up_price = format!("{:.2}", price);
+    let round_up_price = round_up_float_to_one_precision(price);
 
     // region :      --- Handle Payment Click
     let handle_payment_click = move |_| {
@@ -66,31 +59,4 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
             }
         }
     )
-}
-
-/// Utility function to check if name is in the Vec<Member> or Members
-///
-/// `true` when name is included,
-///
-/// `false` when name is not included
-///
-/// # Examples
-///
-/// Basic usage:
-///
-/// ```
-/// let members = vec![{ name: "a", paid: false },{ name: "b", paid: false }]
-/// assert_eq!(has_self_in(&members, "a"), true);
-/// assert_eq!(has_self_in(&members, "c"), false);
-/// ```
-fn has_name_in(members: &Members, name: &str) -> bool {
-    let mut found: bool = false;
-    for n in members {
-        if n.name == name {
-            found = true;
-            break;
-        }
-    }
-
-    return found;
 }
