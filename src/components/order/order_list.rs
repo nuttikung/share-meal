@@ -34,6 +34,11 @@ pub fn OrderList() -> Element {
                                         class: "px-3 py-3.5 text-center text-sm font-semibold text-gray-900",
                                         "คนละ"
                                     }
+                                    th {
+                                        scope: "col",
+                                        class: "px-3 py-3.5 text-center text-sm font-semibold text-gray-900",
+                                        ""
+                                    }
                                 }
                             }
 

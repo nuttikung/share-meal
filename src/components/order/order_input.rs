@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use uuid::Uuid;
 
 use crate::{
     components::order::order_member_check_box::OrderMemberCheckBox,
@@ -22,7 +23,7 @@ pub fn OrderInput() -> Element {
     // region :      --- Handle Price Input
     let handle_price_change = move |event: Event<FormData>| {
         let input_value = event.data().value().parse::<f64>();
-        // Error
+        // Parsing float error
         if input_value.is_err() {
             return;
         }
@@ -55,8 +56,7 @@ pub fn OrderInput() -> Element {
             return;
         }
 
-        // TODO: uuid function support 3 platforms
-        let id = "1111".to_string();
+        let id = Uuid::new_v4().to_string();
         let new_order = Order {
             id,
             title: order_name(),
