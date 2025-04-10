@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use dioxus::{logger::tracing, prelude::*};
 use dioxus_material_icons::MaterialIcon;
 use hextool::{Convert, Hex};
 

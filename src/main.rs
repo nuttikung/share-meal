@@ -10,7 +10,7 @@ use shared_meal::{
         stats::stats_overview::StatsOverview,
         tab::tab_view_switcher::TabViewSwitcher,
     },
-    state::app_state::AppState,
+    state::{app_state::AppState, member::Member, order::Order},
 };
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -29,8 +29,19 @@ fn App() -> Element {
     use_context_provider(|| {
         Signal::new(AppState {
             view: String::from("orders"),
-            orders: vec![],
-            members: vec![],
+            orders: vec![Order {
+                id: String::from("1"),
+                title: String::from("ส้มตำ"),
+                members: vec![Member {
+                    name: String::from("a"),
+                    paid: false,
+                }],
+                price: 130.00,
+            }],
+            members: vec![Member {
+                name: String::from("a"),
+                paid: false,
+            }],
             seleted_order: None,
         })
     });
@@ -59,7 +70,7 @@ pub fn Overview() -> Element {
 
                 if current_view == "orders" {
                     OrderList {}
-                    OrderInput {}
+                    // OrderInput {}
                 } else {
                     MemberList {}
                     MemberInput {}
