@@ -73,7 +73,7 @@ pub fn OrderInput() -> Element {
 
     rsx! {
         div {
-            class: "m-2 space-y-12",
+            class: "px-4 md:px-2 space-y-12",
             div {
                 class: "pt-4 pb-4",
                 div {

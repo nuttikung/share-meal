@@ -31,6 +31,7 @@ fn App() -> Element {
             view: String::from("orders"),
             orders: vec![],
             members: vec![],
+            seleted_order: None,
         })
     });
 
