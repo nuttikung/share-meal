@@ -1,9 +1,9 @@
 [application]
 
 [web.app]
-
 # HTML title tag content
 title = "shared_meal"
+base_path = "share-meal-web"
 
 # include `assets` in web platform
 [web.resource]
