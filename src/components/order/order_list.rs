@@ -28,6 +28,7 @@ pub fn OrderList() -> Element {
 
                 for order in orders {
                     OrderRecord {
+                        key: "{order.id}",
                         id: "{order.id}",
                         title: "{order.title}",
                         price: order.price,

@@ -80,7 +80,11 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
                             class: "flex gap-x-2",
                             span {
                                 class: "truncate",
-                                "{title}"
+                                if &title == "" {
+                                    "ยังไม่ได้ระบุชื่อรายการ"
+                                } else {
+                                    "{title}"
+                                }
                             }
                         }
                     }
@@ -92,7 +96,7 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
                 }
 
                 div {
-                    class: "py-1 flex items-center gap-x-2.5 text-xs/5 text-gray-400",
+                    class: "py-1 flex flex-wrap items-center gap-x-1.5 text-xs/5 text-gray-400",
 
                     if members.len() == 0 {
                         div {
@@ -105,14 +109,6 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
                         span {
                             class: "inline-flex items-center gap-x-0.5 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset",
                             "{m.name}"
-                            button {
-                                r#type: "button",
-                                class: "group relative -mr-1 size-3.5 rounded-xs hover:bg-gray-500/20",
-                                MaterialIcon {
-                                    size: 14,
-                                    name: "close"
-                                }
-                            }
                         }
                     }
                 }

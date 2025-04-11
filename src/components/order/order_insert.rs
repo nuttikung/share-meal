@@ -2,70 +2,58 @@ use dioxus::prelude::*;
 use uuid::Uuid;
 
 use crate::{
-    components::order::order_member_check_box::OrderMemberCheckBox,
-    state::{app_state::AppState, member::Member, order::Order},
+    components::order::{order_input::OrderInput, order_member_check_box::OrderMemberCheckBox, order_price_input::OrderPriceInput},
+    state::{app_state::AppState, member::{Member, Members}, order::Order},
 };
 
 #[component]
-pub fn OrderInput() -> Element {
+pub fn OrderInsert() -> Element {
     let mut context = use_context::<Signal<AppState>>();
-    let all_members = context.read().members.clone();
-    let mut order_name = use_signal(|| "".to_string());
+    let read_context = context.read();
+    let mut title = use_signal(|| String::from(""));
     let mut price = use_signal(|| 0.0);
     let mut selected_member = use_signal(|| vec![] as Vec<Member>);
-
-    // region :      --- Handle Order Name Input
-    let handle_order_name_change = move |event: Event<FormData>| {
-        order_name.set(event.value());
-    };
-    // end region :  --- Handle Order Name Input
 
     // region :      --- Handle Price Input
     let handle_price_change = move |event: Event<FormData>| {
         let input_value = event.data().value().parse::<f64>();
-        // Parsing float error
-        if input_value.is_err() {
-            return;
+        if input_value.is_ok() {
+            let new_price = input_value.unwrap();
+            price.set(new_price);
         }
-
-        let new_price = input_value.unwrap();
-        price.set(new_price);
     };
     // end region :  --- Handle Price Input
 
+    // region :      --- Handle Update Member
+    let mut handle_update_member = move |person: &Member, selected| {
+        if selected == false {
+            let update_members = exclude_member(&selected_member(), &person.name);
+            selected_member.set(update_members);
+        } else {
+            selected_member.push(person.clone());
+        }
+    };
+    // end region :  --- Handle Update Member
+
     // region :      --- Handle Select All Member
     let handle_select_all = move |_| {
-        let members: Vec<Member> = context
-            .read()
-            .members
-            .clone()
-            .iter()
-            .map(|m| m.clone())
-            .collect();
-        if members.len() == selected_member.read().len() {
-            selected_member.set(Vec::new());
-        } else {
-            selected_member.set(members);
-        }
+        let all_members = context.read().members.clone();
+        selected_member.set(all_members.to_owned());
     };
     // end region :  --- Handle Select All Member
 
     // region :      --- Handle Add Order
     let handle_add_order = move |_| {
-        if order_name.read().is_empty() {
-            return;
-        }
-
         let id = Uuid::new_v4().to_string();
         let new_order = Order {
             id,
-            title: order_name(),
+            title: title(),
             price: price(),
             members: selected_member(),
         };
         context.write().orders.push(new_order);
-
-        order_name.set("".to_string());
+        // Reset input to default value
+        title.set(String::from(""));
         selected_member.set(Vec::new());
         price.set(0.0);
     };
@@ -87,14 +75,9 @@ pub fn OrderInput() -> Element {
                         }
                         div {
                             class: "mt-2",
-                            input {
-                                id: "order-name",
-                                class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 sm:text-sm/6",
-                                autocomplete: "off",
-                                type: "text",
-                                name: "order_name",
-                                value: "{order_name}",
-                                onchange: handle_order_name_change,
+                            OrderInput {
+                                name: title,
+                                oninput: move |event: FormEvent| title.set(event.value())
                             }
                         }
                     }
@@ -107,24 +90,9 @@ pub fn OrderInput() -> Element {
                         }
                         div {
                             class: "mt-2 flex items-center rounded-md bg-white px-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500",
-                            div {
-                                class: "shrink-0 text-base text-gray-500 select-none sm:text-sm/6",
-                                "฿"
-                            }
-                            input {
-                                id: "order-price",
-                                class: "block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6",
-                                placeholder: "0.00",
-                                type: "number",
-                                name: "price",
-                                aria_describedby: "price-currency",
-                                value: "{price}",
-                                onchange: handle_price_change
-                            }
-                            div {
-                                id: "price-currency",
-                                class: "shrink-0 text-base text-gray-500 select-none sm:text-sm/6",
-                                "บาท"
+                            OrderPriceInput {
+                                value: price(),
+                                oninput: handle_price_change
                             }
                         }
                     }
@@ -137,25 +105,15 @@ pub fn OrderInput() -> Element {
                             }
 
                             div {
-                                for person in all_members.clone() {
+                                for person in read_context.members.clone() {
                                     OrderMemberCheckBox {
                                         name: "{person.name}",
-                                        selected: !selected_member.read().iter().find(|m| m.name == person.name).is_none(),
-                                        onselect: move |new_value| {
-                                            selected_member.with_mut(|members| {
-                                                if new_value {
-                                                    members.push(person.clone());
-                                                } else {
-                                                    if let Some(index) = members.iter().position(|m| m.name == person.name) {
-                                                        members.remove(index);
-                                                    }
-                                                }
-                                            })
-                                        }
+                                        selected: selected_member.iter().find(|m| m.name == person.name).is_some(),
+                                        onselect: move |selected| handle_update_member(&person, selected),
                                     }
                                 }
 
-                                if all_members.len() == 0 {
+                                if read_context.members.len() == 0 {
                                     div {
                                         class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
                                         "ยังไม่มีคนจ่าย"
@@ -188,4 +146,13 @@ pub fn OrderInput() -> Element {
             }
         }
     }
+}
+
+// TODO: move to helper
+fn exclude_member(members: &Members, name: &str) -> Members {
+    let tmp = members.clone();
+    tmp.iter()
+        .filter(|&m| m.name != name)
+        .map(|m| m.clone())
+        .collect()
 }

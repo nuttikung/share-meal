@@ -8,7 +8,7 @@ use crate::{
         member::{Member, Members},
     },
 };
-use dioxus::{logger::tracing, prelude::*};
+use dioxus::prelude::*;
 
 #[component]
 pub fn OrderModalEdit() -> Element {
@@ -34,26 +34,18 @@ pub fn OrderModalEdit() -> Element {
         if selected == false {
             let update_members = exclude_member(&members(), &person.name);
             members.set(update_members);
-            return
+        } else {
+            members.push(person.clone());
         }
-
-
-
-        // let update_members = members().iter_mut(|m| {
-        //     if selected {
-        //         m.push(person.clone());
-        //     } else {
-        //         if let Some(index) = members.iter().position(|m| m.name == person.name) {
-        //             members.remove(index);
-        //         }
-        //     }
-        // });
-
-        // tracing::debug!("{:?} {:?}",selected, update_members);
-
-        // members.set(update_members);
     };
     // end region :  --- Handle Update Member
+
+    // region :      --- Handle Select All Member
+    let handle_select_all = move |_| {
+        let all_members = context.read().members.clone();
+        members.set(all_members.to_owned());
+    };
+    // end region :  --- Handle Select All Member
 
     // region :      --- Handle Update Order
     let handle_apply_order = move |_: Event<MouseData>| {
@@ -65,6 +57,7 @@ pub fn OrderModalEdit() -> Element {
         {
             order_to_update.title = title();
             order_to_update.price = price();
+            order_to_update.members = members();
         }
         // close modal
         app_state.seleted_order = None;
@@ -87,7 +80,7 @@ pub fn OrderModalEdit() -> Element {
                 div {
                     class: "flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0",
                     div {
-                        class: "relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6",
+                        class: "relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:min-w-sm sm:max-w-sm sm:p-6",
                         div {
                             OrderInput {
                                 name: title,
@@ -112,61 +105,30 @@ pub fn OrderModalEdit() -> Element {
                                 }
                             }
 
-                            // if members.len() == 0 {
-                            //     div {
-                            //         class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                            //         "ยังไม่มีคนจ่าย"
-                            //     }
-                            // } else {
-                            //     div {
-                            //         class: "relative inline-flex gap-3 py-2 mr-2",
-                            //         button {
-                            //             r#type: "button",
-                            //             class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
-                            //             onclick: handle_select_all,
-                            //             "เลือกทุกคน"
-                            //         }
-                            //     }
-                            // }
+                            if read_context.members.len() == 0 {
+                                div {
+                                    class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
+                                    "ยังไม่มีคนจ่าย"
+                                }
+                            }   else {
+                                div {
+                                    class: "relative inline-flex gap-3 py-2 mr-2",
+                                    button {
+                                        r#type: "button",
+                                        class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
+                                        onclick: handle_select_all,
+                                        "เลือกทุกคน"
+                                    }
+                                }
+                            }
                         }
-
-                        // div {
-                        //     div { class: "mx-auto flex size-12 items-center justify-center rounded-full bg-green-100",
-                        //         svg {
-                        //             "stroke-width": "1.5",
-                        //             stroke: "currentColor",
-                        //             "aria-hidden": "true",
-                        //             "viewBox": "0 0 24 24",
-                        //             "data-slot": "icon",
-                        //             fill: "none",
-                        //             class: "size-6 text-green-600",
-                        //             path {
-                        //                 "stroke-linecap": "round",
-                        //                 d: "m4.5 12.75 6 6 9-13.5",
-                        //                 "stroke-linejoin": "round",
-                        //             }
-                        //         }
-                        //     }
-                        //     div { class: "mt-3 text-center sm:mt-5",
-                        //         h3 {
-                        //             class: "text-base font-semibold text-gray-900",
-                        //             id: "modal-title",
-                        //             "Payment successful"
-                        //         }
-                        //         div { class: "mt-2",
-                        //             p { class: "text-sm text-gray-500",
-                        //                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur amet labore."
-                        //             }
-                        //         }
-                        //     }
-                        // }
 
                         div { class: "mt-5 sm:mt-6",
                             button {
-                                class: "inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+                                class: "inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
                                 r#type: "button",
                                 onclick: handle_apply_order,
-                                "Apply and close"
+                                "บันทึก"
                             }
                         }
                     }
@@ -176,6 +138,7 @@ pub fn OrderModalEdit() -> Element {
     }
 }
 
+// TODO: move to helper
 fn exclude_member(members: &Members, name: &str) -> Members {
     let tmp = members.clone();
     tmp.iter()
