@@ -34,6 +34,11 @@ pub fn MemberList() -> Element {
                                         class: "px-3 py-3.5 text-center text-sm font-semibold text-gray-900",
                                         "สภานะ"
                                     }
+                                    th {
+                                        scope: "col",
+                                        class: "px-3 py-3.5",
+                                        ""
+                                    }
                                 }
                             }
 
@@ -42,7 +47,7 @@ pub fn MemberList() -> Element {
                                     tr {
                                         td {
                                             class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                                            colspan: 3,
+                                            colspan: 4,
                                             "ยังไม่มีคนจ่าย"
                                         }
                                     }

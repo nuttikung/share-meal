@@ -9,7 +9,7 @@ use crate::{
 #[component]
 pub fn MemberInput() -> Element {
     let mut context = use_context::<Signal<AppState>>();
-    let mut person = use_signal(|| "".to_string());
+    let mut person = use_signal(|| String::from(""));
 
     // region :      --- Handle Input Change
     let handle_person_input_change = move |event: Event<FormData>| {
@@ -35,7 +35,7 @@ pub fn MemberInput() -> Element {
                 .members
                 .insert(*current_members_count, new_member);
         }
-        person.set("".to_string());
+        person.set(String::from(""));
     };
     // end region :  --- Add Member
 

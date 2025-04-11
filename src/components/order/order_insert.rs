@@ -2,8 +2,15 @@ use dioxus::prelude::*;
 use uuid::Uuid;
 
 use crate::{
-    components::order::{order_input::OrderInput, order_member_check_box::OrderMemberCheckBox, order_price_input::OrderPriceInput},
-    state::{app_state::AppState, member::{Member, Members}, order::Order},
+    components::order::{
+        order_input::OrderInput, order_member_check_box::OrderMemberCheckBox,
+        order_price_input::OrderPriceInput,
+    },
+    state::{
+        app_state::AppState,
+        member::{Member, Members},
+        order::Order,
+    },
 };
 
 #[component]
@@ -41,6 +48,12 @@ pub fn OrderInsert() -> Element {
         selected_member.set(all_members.to_owned());
     };
     // end region :  --- Handle Select All Member
+
+    // region :      --- Handle Unselect Member
+    let handle_un_select_all = move |_| {
+        selected_member.set(Vec::new());
+    };
+    // end region :  --- Handle Unselect Member
 
     // region :      --- Handle Add Order
     let handle_add_order = move |_| {
@@ -121,11 +134,20 @@ pub fn OrderInsert() -> Element {
                                 } else {
                                     div {
                                         class: "relative inline-flex gap-3 py-2 mr-2",
-                                        button {
-                                            r#type: "button",
-                                            class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
-                                            onclick: handle_select_all,
-                                            "เลือกทุกคน"
+                                        if selected_member.len() == read_context.members.len() {
+                                            button {
+                                                r#type: "button",
+                                                class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-red-400 hover:bg-red-500 text-white",
+                                                onclick: handle_un_select_all,
+                                                "ยกเลิกการเลือก"
+                                            }
+                                        } else {
+                                            button {
+                                                r#type: "button",
+                                                class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
+                                                onclick: handle_select_all,
+                                                "เลือกทุกคน"
+                                            }
                                         }
                                     }
                                 }

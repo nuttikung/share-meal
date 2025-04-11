@@ -40,6 +40,12 @@ pub fn OrderModalEdit() -> Element {
     };
     // end region :  --- Handle Update Member
 
+    // region :      --- Handle Unselect Member
+    let handle_un_select_all = move |_| {
+        members.set(Vec::new());
+    };
+    // end region :  --- Handle Unselect Member
+
     // region :      --- Handle Select All Member
     let handle_select_all = move |_| {
         let all_members = context.read().members.clone();
@@ -113,11 +119,21 @@ pub fn OrderModalEdit() -> Element {
                             }   else {
                                 div {
                                     class: "relative inline-flex gap-3 py-2 mr-2",
-                                    button {
-                                        r#type: "button",
-                                        class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
-                                        onclick: handle_select_all,
-                                        "เลือกทุกคน"
+
+                                    if members.len() == read_context.members.len() {
+                                        button {
+                                            r#type: "button",
+                                            class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-red-400 hover:bg-red-500 text-white",
+                                            onclick: handle_un_select_all,
+                                            "ยกเลิกการเลือก"
+                                        }
+                                    } else {
+                                        button {
+                                            r#type: "button",
+                                            class: "cursor-pointer inline-flex items-center gap-x-1.5 rounded-md p-2 text-xs font-medium bg-sky-400 hover:bg-sky-500 text-white",
+                                            onclick: handle_select_all,
+                                            "เลือกทุกคน"
+                                        }
                                     }
                                 }
                             }

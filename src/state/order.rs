@@ -50,6 +50,10 @@ impl Order {
         return &self.price / (self.members.len() as f64);
     }
 
+    pub fn remove_member(&mut self, name: &str) {
+        self.members.retain(|m| m.name != name);
+    }
+
     /// Utility function to clear all members in this order
     pub fn clear_members(&mut self) {
         self.members = vec![];
