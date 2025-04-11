@@ -101,7 +101,7 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
                     if members.len() == 0 {
                         div {
                             class: "text-sm text-center whitespace-nowrap text-gray-500",
-                            "ยังไม่คนจ่าย"
+                            "ยังมีไม่คนจ่าย"
                         }
                     }
 

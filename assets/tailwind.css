@@ -19,8 +19,6 @@
     --color-blue-400: oklch(0.707 0.165 254.624);
     --color-blue-500: oklch(0.623 0.214 259.815);
     --color-blue-600: oklch(0.546 0.245 262.881);
-    --color-indigo-500: oklch(0.585 0.233 277.117);
-    --color-indigo-600: oklch(0.511 0.262 276.966);
     --color-gray-50: oklch(0.985 0.002 247.839);
     --color-gray-100: oklch(0.967 0.003 264.542);
     --color-gray-200: oklch(0.928 0.006 264.531);
@@ -227,9 +225,6 @@
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
-  .z-3 {
-    z-index: 3;
-  }
   .z-10 {
     z-index: 10;
   }
@@ -330,23 +325,8 @@
     width: calc(var(--spacing) * 5);
     height: calc(var(--spacing) * 5);
   }
-  .h-2 {
-    height: calc(var(--spacing) * 2);
-  }
-  .h-6 {
-    height: calc(var(--spacing) * 6);
-  }
   .min-h-full {
     min-height: 100%;
-  }
-  .w-5 {
-    width: calc(var(--spacing) * 5);
-  }
-  .w-8 {
-    width: calc(var(--spacing) * 8);
-  }
-  .w-9 {
-    width: calc(var(--spacing) * 9);
   }
   .w-full {
     width: 100%;
@@ -522,9 +502,6 @@
   .rounded {
     border-radius: 0.25rem;
   }
-  .rounded-full {
-    border-radius: calc(infinity * 1px);
-  }
   .rounded-lg {
     border-radius: var(--radius-lg);
   }
@@ -593,9 +570,6 @@
   .bg-green-100 {
     background-color: var(--color-green-100);
   }
-  .bg-indigo-600 {
-    background-color: var(--color-indigo-600);
-  }
   .bg-neutral-50 {
     background-color: var(--color-neutral-50);
   }
@@ -607,9 +581,6 @@
   }
   .bg-red-400 {
     background-color: var(--color-red-400);
-  }
-  .bg-red-600 {
-    background-color: var(--color-red-600);
   }
   .bg-sky-400 {
     background-color: var(--color-sky-400);
@@ -631,9 +602,6 @@
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
-  }
-  .p-9 {
-    padding: calc(var(--spacing) * 9);
   }
   .px-1 {
     padding-inline: calc(var(--spacing) * 1);
@@ -792,9 +760,6 @@
   .text-white {
     color: var(--color-white);
   }
-  .capitalize {
-    text-transform: capitalize;
-  }
   .lowercase {
     text-transform: lowercase;
   }
@@ -803,10 +768,6 @@
   }
   .italic {
     font-style: italic;
-  }
-  .ordinal {
-    --tw-ordinal: ordinal;
-    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
   }
   .underline {
     text-decoration-line: underline;
@@ -930,13 +891,6 @@
       }
     }
   }
-  .hover\:bg-indigo-500 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-indigo-500);
-      }
-    }
-  }
   .hover\:bg-red-100 {
     &:hover {
       @media (hover: hover) {
@@ -1006,16 +960,6 @@
   .focus-visible\:outline-blue-600 {
     &:focus-visible {
       outline-color: var(--color-blue-600);
-    }
-  }
-  .focus-visible\:outline-indigo-600 {
-    &:focus-visible {
-      outline-color: var(--color-indigo-600);
-    }
-  }
-  .focus-visible\:outline-red-600 {
-    &:focus-visible {
-      outline-color: var(--color-red-600);
     }
   }
   .sm\:col-span-6 {
@@ -1166,26 +1110,6 @@
   inherits: false;
 }
 @property --tw-tracking {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-ordinal {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-slashed-zero {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-figure {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-spacing {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-fraction {
   syntax: "*";
   inherits: false;
 }
