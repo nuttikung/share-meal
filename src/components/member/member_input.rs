@@ -35,6 +35,7 @@ pub fn MemberInput() -> Element {
                 .members
                 .insert(*current_members_count, new_member);
         }
+
         person.set(String::from(""));
     };
     // end region :  --- Add Member
@@ -55,7 +56,7 @@ pub fn MemberInput() -> Element {
 
     rsx! {
         div {
-            class: "m-2 py-2 flex",
+            class: "flex py-2 px-4 md:px-2",
             div {
                 class: "-mr-px grid grow grid-cols-1 focus-within:relative",
                 input {

@@ -101,12 +101,13 @@ pub fn OrderRecord(props: OrderRecordProps) -> Element {
                     if members.len() == 0 {
                         div {
                             class: "text-sm text-center whitespace-nowrap text-gray-500",
-                            "ยังมีไม่คนจ่าย"
+                            "ยังไม่มีคนจ่าย"
                         }
                     }
 
                     for m in &members {
                         span {
+                            key: "{m.name}",
                             class: "inline-flex items-center gap-x-0.5 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset",
                             "{m.name}"
                         }

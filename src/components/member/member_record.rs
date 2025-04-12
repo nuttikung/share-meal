@@ -54,40 +54,51 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
     // end region :  --- Handle Payment Click
 
     rsx!(
-        tr {
-            td {
-                class: "py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0",
-                "{props.name}"
-            }
-            td {
-                class: "px-3 py-4 text-sm whitespace-nowrap text-gray-500",
-                "{round_up_price}"
-            }
-            td {
-                class: "px-3 py-4 text-sm text-center whitespace-nowrap text-gray-500",
-                if props.paid {
+        li {
+            div {
+                class: "group flex w-full items-center justify-between space-x-3 rounded-xl border border-gray-300 p-2 text-left shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+                span {
+                    class: "flex min-w-0 flex-1 items-center space-x-3",
                     span {
-                        class: "inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700 cursor-pointer",
-                        onclick: handle_payment_click,
-                        "จ่ายแล้ว"
-                    }
-                } else {
-                    span {
-                        class: "inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 cursor-pointer",
-                        onclick: handle_payment_click,
-                        "ยังไม่จ่าย"
+                        class: "block min-w-0 flex-1",
+                        span {
+                            class: "block truncate text-sm font-medium text-gray-900",
+                            "{props.name}"
+                        }
+                        span {
+                            class: "block truncate text-sm font-medium text-gray-500",
+                            "{round_up_price} บาท"
+                        }
+
+                        div {
+                            if props.paid {
+                                span {
+                                    class: "inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700 cursor-pointer",
+                                    onclick: handle_payment_click,
+                                    "จ่ายแล้ว"
+                                }
+                            } else {
+                                span {
+                                    class: "inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 cursor-pointer",
+                                    onclick: handle_payment_click,
+                                    "ยังไม่จ่าย"
+                                }
+                            }
+                        }
                     }
                 }
-            }
-            td {
-                class: "px-3 py-4 text-sm whitespace-nowrap text-gray-500",
-                button {
-                    class: "flex justify-center items-center p-1.5 text-gray",
-                    r#type: "button",
-                    onclick: handle_delete_member,
-                    MaterialIcon {
-                        name: "delete",
-                        size: 20,
+
+                span {
+                    class: "inline-flex size-10 shrink-0 items-center justify-center",
+                    button {
+                        class: "text-red-400",
+                        // class: "flex justify-center items-center p-1.5 text-gray",
+                        r#type: "button",
+                        onclick: handle_delete_member,
+                        MaterialIcon {
+                            name: "delete",
+                            size: 20,
+                        }
                     }
                 }
             }
