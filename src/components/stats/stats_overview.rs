@@ -34,7 +34,7 @@ pub fn StatsOverview() -> Element {
                     "ราคารวม"
                 }
                 dd {
-                    class: "w-full flex-none text-3xl/10 font-medium tracking-tight text-gray-900",
+                    class: "w-full flex-none text-3xl/10 font-medium tracking-tight text-gray-900 truncate",
                     "{total_price_round_up}"
                 }
             }

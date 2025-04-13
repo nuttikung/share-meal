@@ -1,4 +1,4 @@
-use dioxus::{html::col::span, prelude::*};
+use dioxus::prelude::*;
 use dioxus_material_icons::MaterialIcon;
 
 use crate::{
@@ -16,26 +16,25 @@ pub fn OrderList() -> Element {
     rsx! {
         div {
             class: "px-4 md:px-2 py-3",
-            ul {
-                role: "list",
-                class: "divide-y divide-gray-500/5",
-
-                if orders.len() == 0 {
-                    div {
-                        class: "relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
-                        span {
-                            class: "text-gray-400",
-                            MaterialIcon {
-                                name: "payments",
-                                size: 48,
-                            }
-                        }
-                        span {
-                            class: "mt-2 block text-sm font-semibold text-gray-900",
-                            "ยังไม่มีรายการ"
+            if orders.len() == 0 {
+                div {
+                    class: "relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+                    span {
+                        class: "text-gray-400",
+                        MaterialIcon {
+                            name: "payments",
+                            size: 48,
                         }
                     }
-                } else {
+                    span {
+                        class: "mt-2 block text-sm font-semibold text-gray-900",
+                        "ยังไม่มีรายการ"
+                    }
+                }
+            } else {
+                ul {
+                    role: "list",
+                    class: "grid grid-cols-1 gap-4 sm:grid-cols-2",
                     for order in orders {
                         OrderRecord {
                             key: "{order.id}",
