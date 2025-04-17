@@ -56,7 +56,10 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
     rsx!(
         li {
             div {
-                class: "group flex w-full items-center justify-between space-x-3 rounded-xl border border-gray-300 p-2 text-left shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+                class: "group flex w-full items-center justify-between space-x-3
+                        rounded-xl border border-gray-300 p-2 text-left shadow-xs
+                        hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:outline-hidden
+                        transform transition duration-500 hover:scale-105",
                 span {
                     class: "flex min-w-0 flex-1 items-center space-x-3",
                     span {
@@ -91,7 +94,7 @@ pub fn MemberRecord(props: MemberRecordProps) -> Element {
                 span {
                     class: "inline-flex size-10 shrink-0 items-center justify-center",
                     button {
-                        class: "text-red-400",
+                        class: "text-red-400 cursor-pointer",
                         // class: "flex justify-center items-center p-1.5 text-gray",
                         r#type: "button",
                         onclick: handle_delete_member,
