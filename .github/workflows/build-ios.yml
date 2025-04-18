@@ -66,12 +66,16 @@ jobs:
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-    - name: Make directory for profile
+    - name: Debug Identity
       run: |
-        mkdir -p ios/ShareMeal.xcodeproj
-        cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-        codesign -f -s "Apple Development: Phudit Chuengjaroen ("$TEAM_ID")" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/ios/release/ShareMeal.app
-      working-directory: .
+        security find-identity
+
+    # - name: Make directory for profile
+    #   run: |
+    #     mkdir -p ios/ShareMeal.xcodeproj
+    #     cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
+    #     codesign -f -s "Apple Development: Phudit Chuengjaroen ("$TEAM_ID")" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/ios/release/ShareMeal.app
+    #   working-directory: .
         # ios/ShareMeal.xcodeproj/ShareMeal.entitlements
 
     # - name: Create entitlements file
