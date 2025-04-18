@@ -65,18 +65,11 @@ jobs:
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      # run: |
-      #   security create-keychain -p temp temp.keychain
-      #   security default-keychain -s temp.keychain
-      #   security unlock-keychain -p temp temp.keychain
-      #   security import certificate.p12 -k temp.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
-      #   security set-key-partition-list -S apple-tool:,apple: -s -k temp temp.keychain
-
     - name: Make directory for profile
       run: |
         mkdir -p ios/ShareMeal.xcodeproj
         cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-        codesign -f -s "Apple Distribution: Phudit Chuengjaroen (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/ios/release/ShareMeal.app
+        codesign -f -s "Apple Development: Phudit Chuengjaroen (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/ios/release/ShareMeal.app
       working-directory: .
         # ios/ShareMeal.xcodeproj/ShareMeal.entitlements
 
