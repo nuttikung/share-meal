@@ -72,9 +72,14 @@ jobs:
       #   security import certificate.p12 -k temp.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
       #   security set-key-partition-list -S apple-tool:,apple: -s -k temp temp.keychain
 
+    - name: Make directory for profile
+      run: |
+        mkdir -p ios/ShareMeal.xcodeproj
+        cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
+
     - name: Debug Path
       run: ls -ltr
-      working-directory: ./target
+      working-directory: ./ios
 
     # - name: Create entitlements file
     #   run: |
