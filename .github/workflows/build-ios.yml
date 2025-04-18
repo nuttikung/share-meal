@@ -79,7 +79,7 @@ jobs:
 
     - name: Debug Path
       run: ls -ltr
-      working-directory: ./ios
+      working-directory: ./ios/ShareMeal.xcodeproj
 
     # - name: Create entitlements file
     #   run: |
