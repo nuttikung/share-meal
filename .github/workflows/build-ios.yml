@@ -15,6 +15,11 @@ jobs:
 
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim
+
+    - name: Install cargo-binstall
+      run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
     - name: Install Dioxus CLI
       run: cargo binstall dioxus-cli
@@ -49,10 +54,10 @@ jobs:
         mkdir Payload
         mv YourApp.app Payload/
         zip -r YourApp.ipa Payload
-      working-directory: ./target/ios/release
+      working-directory: .
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ShareMeal.ipa
-        path: ./target/ios/release/ShareMeal.ipa
+        path: ./ShareMeal.ipa
