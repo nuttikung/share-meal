@@ -1,0 +1,58 @@
+name: Build and Sign iOS App
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install Dioxus CLI
+      run: cargo install dioxus-cli
+
+    - name: Build unsigned iOS bundle
+      run: dx bundle --platform ios
+      working-directory: ./shared-meal
+
+    - name: Decode certificate
+      run: echo "${{ secrets.IOS_CERTIFICATE }}" | base64 -d > certificate.p12
+
+    - name: Decode provisioning profile
+      run: echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 -d > profile.mobileprovision
+
+    - name: Import certificate into keychain
+      run: |
+        security create-keychain -p temp temp.keychain
+        security default-keychain -s temp.keychain
+        security unlock-keychain -p temp temp.keychain
+        security import certificate.p12 -k temp.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple: -s -k temp temp.keychain
+
+    - name: Sign the app
+      run: |
+        mkdir -p ios/ShareMeal.xcodeproj
+        cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
+        codesign -f -s "Apple Distribution: Your Name (TeamID)" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
+      working-directory: ./shared-meal
+
+    - name: Archive to IPA
+      run: |
+        mkdir Payload
+        mv YourApp.app Payload/
+        zip -r YourApp.ipa Payload
+      working-directory: ./shared-meal/target/ios/release
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ShareMeal.ipa
+        path: ./shared-meal/target/ios/release/ShareMeal.ipa
