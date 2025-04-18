@@ -76,10 +76,9 @@ jobs:
       run: |
         mkdir -p ios/ShareMeal.xcodeproj
         cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-
-    - name: Debug Path
-      run: ls -ltr
-      working-directory: ./ios/ShareMeal.xcodeproj
+        codesign -f -s "Apple Distribution: Phudit Chuengjaroen (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/ios/release/ShareMeal.app
+      working-directory: .
+        # ios/ShareMeal.xcodeproj/ShareMeal.entitlements
 
     # - name: Create entitlements file
     #   run: |
