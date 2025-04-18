@@ -36,11 +36,24 @@ jobs:
 
     - name: Import certificate into keychain
       run: |
-        security create-keychain -p temp temp.keychain
-        security default-keychain -s temp.keychain
-        security unlock-keychain -p temp temp.keychain
-        security import certificate.p12 -k temp.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
-        security set-key-partition-list -S apple-tool:,apple: -s -k temp temp.keychain
+        # Create a temporary keychain
+        security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+        # Make the temporary keychain default
+        security default-keychain -s build.keychain
+        # Unlock the temporary keychain
+        security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+        # Set keychain timeout to 1 hour for long builds
+        security set-keychain-settings -t 3600 -l ~/Library/Keychains/build.keychain
+        # Add the certificate to the keychain
+        security import certificate.p12 -k build.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -A
+        # Allow codesign to access the keychain
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+      # run: |
+      #   security create-keychain -p temp temp.keychain
+      #   security default-keychain -s temp.keychain
+      #   security unlock-keychain -p temp temp.keychain
+      #   security import certificate.p12 -k temp.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+      #   security set-key-partition-list -S apple-tool:,apple: -s -k temp temp.keychain
 
     - name: Sign the app
       run: |
