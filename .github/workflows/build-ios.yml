@@ -91,16 +91,25 @@ jobs:
 
     - name: Sign the app
       run: |
-        mkdir -p ios/ShareMeal.xcodeproj
-        cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-        codesign -f -s "Apple Distribution: Phudit Chuengjaoren (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
-      working-directory: .
+        # Find signing identity
+        IDENTITY=$(security find-identity -v | grep "Apple Distribution" | head -n 1 | awk -F '"' '{print $2}')
+        echo "Using signing identity: $IDENTITY"
+
+        # Sign the app
+        codesign -f -s "$IDENTITY" --entitlements ios/entitlements.plist target/ios/release/ShareMeal.app
+
+    # - name: Sign the app
+    #   run: |
+    #     mkdir -p ios/ShareMeal.xcodeproj
+    #     cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
+    #     codesign -f -s "Apple Distribution: Phudit Chuengjaoren (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
+    #   working-directory: .
 
     - name: Archive to IPA
       run: |
-        mkdir Payload
-        mv YourApp.app Payload/
-        zip -r YourApp.ipa Payload
+        mkdir -p Payload
+        cp -r target/ios/release/ShareMeal.app Payload/
+        zip -r ShareMeal.ipa Payload
       working-directory: .
 
     - name: Upload artifact
