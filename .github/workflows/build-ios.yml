@@ -21,7 +21,7 @@ jobs:
 
     - name: Build unsigned iOS bundle
       run: dx bundle --platform ios
-      working-directory: ./shared-meal
+      working-directory: .
 
     - name: Decode certificate
       run: echo "${{ secrets.IOS_CERTIFICATE }}" | base64 -d > certificate.p12
@@ -42,17 +42,17 @@ jobs:
         mkdir -p ios/ShareMeal.xcodeproj
         cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
         codesign -f -s "Apple Distribution: Your Name (TeamID)" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
-      working-directory: ./shared-meal
+      working-directory: .
 
     - name: Archive to IPA
       run: |
         mkdir Payload
         mv YourApp.app Payload/
         zip -r YourApp.ipa Payload
-      working-directory: ./shared-meal/target/ios/release
+      working-directory: ./target/ios/release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ShareMeal.ipa
-        path: ./shared-meal/target/ios/release/ShareMeal.ipa
+        path: ./target/ios/release/ShareMeal.ipa
