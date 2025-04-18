@@ -17,7 +17,7 @@ jobs:
       uses: dtolnay/rust-toolchain@stable
 
     - name: Install Dioxus CLI
-      run: cargo install dioxus-cli
+      run: cargo binstall dioxus-cli
 
     - name: Build unsigned iOS bundle
       run: dx bundle --platform ios
@@ -41,7 +41,7 @@ jobs:
       run: |
         mkdir -p ios/ShareMeal.xcodeproj
         cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-        codesign -f -s "Apple Distribution: Your Name (TeamID)" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
+        codesign -f -s "Apple Distribution: Phudit Chuengjaoren (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
       working-directory: .
 
     - name: Archive to IPA
