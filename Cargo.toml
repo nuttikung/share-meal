@@ -1,6 +1,6 @@
 [package]
-name = "shared_meal"
-version = "0.1.0"
+name = "share meal"
+version = "1.0.0"
 authors = ["Phudit Chuengjaroen <phudit.nut@gmail.com>"]
 edition = "2021"
 

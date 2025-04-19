@@ -6,14 +6,20 @@ identifier = "com.phuditc.sharemeal"
 displayname = "Share Meal"
 name = "Share Meal"
 publisher = "Phudit Chuengjaroen"
-icon = ["assets/app-icon-share-meal.png"]
-category = "Utilities"
+icon = [
+    "icons/16x16.png",
+    "icons/32x32.png",
+    "icons/64x64.png",
+    "icons/256x256.png",
+    "assets/favicon.ico"
+]
+category = "Utility"
 copyright = "Phudit Chuengjaroen"
 short_description = "Split bills fairly by item, not just total. Track who ordered what and pay your share only"
 
 [web.app]
 # HTML title tag content
-title = "shared_meal"
+title = "Shared Meal"
 # base_path = "share-meal-web"
 
 # include `assets` in web platform
