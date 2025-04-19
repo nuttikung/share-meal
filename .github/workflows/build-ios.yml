@@ -87,20 +87,24 @@ jobs:
         <plist version="1.0">
         <dict>
             <key>application-identifier</key>
-            <string>$APPLICATION_IDENTIFIER</string>
+            <string>"$APPLICATION_IDENTIFIER"</string>
             <key>com.apple.developer.team-identifier</key>
-            <string>$TEAM_IDENTIFIER</string>
+            <string>"$TEAM_IDENTIFIER"</string>
         </dict>
         </plist>
         EOF
+
+    - name: Copy Unsign Application
+      run: cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
+
+    - name: Copy Provision
+      run: cp profile.mobileprovision ios/SharedMeal.app/embedded.mobileprovision
 
     - name: Copy Bundle and Sign
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
         COMPANY_NAME: ${{ secrets.COMPANY_NAME }}
       run: |
-        cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
-        cp profile.mobileprovision ios/SharedMeal.app/embedded.mobileprovision
         codesign --force --options runtime --entitlements ios/entitlements.plist --sign "Apple Development: "$COMPANY_NAME" ("$TEAM_ID")" SharedMeal.app
       working-directory: .
 
