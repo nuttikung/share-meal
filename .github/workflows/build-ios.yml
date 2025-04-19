@@ -97,7 +97,6 @@ jobs:
     - name: Copy Unsign Application
       run: |
         cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
-        ls -ltr ios/
       working-directory: .
 
     - name: Copy Provision
@@ -112,15 +111,15 @@ jobs:
         codesign --force --options runtime --entitlements entitlements.plist --sign "Apple Development: Phudit Chuengjaroen ("$TEAM_ID")" SharedMeal.app
       working-directory: ./ios
 
-    # - name: Archive to IPA
-    #   run: |
-    #     mkdir -p Payload
-    #     cp -r target/ios/release/ShareMeal.app Payload/
-    #     zip -r ShareMeal.ipa Payload
-    #   working-directory: .
+    - name: Archive to IPA
+      run: |
+        mkdir -p release
+        cp -r ios/ShareMeal.app release/
+        zip -r ShareMeal.ipa release
+      working-directory: .
 
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ShareMeal.ipa
-    #     path: ./ShareMeal.ipa
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ShareMeal.ipa
+        path: ./release/ShareMeal.ipa
