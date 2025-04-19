@@ -114,8 +114,7 @@ jobs:
     - name: Archive to IPA
       run: |
         mkdir -p release
-        ls -ltr ./ios
-        # cp -r ios/ShareMeal.app release/
+        # cp -R ios/ShareMeal.app release/ShareMeal.app
         # zip -r ShareMeal.ipa release
       working-directory: .
 
