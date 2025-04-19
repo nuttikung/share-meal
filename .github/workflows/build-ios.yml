@@ -87,9 +87,9 @@ jobs:
         <plist version="1.0">
         <dict>
             <key>application-identifier</key>
-            <string>"$APPLICATION_IDENTIFIER"</string>
+            <string>echo $APPLICATION_IDENTIFIER</string>
             <key>com.apple.developer.team-identifier</key>
-            <string>"$TEAM_IDENTIFIER"</string>
+            <string>echo $TEAM_IDENTIFIER</string>
         </dict>
         </plist>
         EOF
@@ -98,9 +98,11 @@ jobs:
       run: |
         cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
         ls -ltr ios/
+      working-directory: .
 
     - name: Copy Provision
       run: cp profile.mobileprovision ios/SharedMeal.app/embedded.mobileprovision
+      working-directory: .
 
     - name: Copy Bundle and Sign
       env:
