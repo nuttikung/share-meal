@@ -95,7 +95,9 @@ jobs:
         EOF
 
     - name: Copy Unsign Application
-      run: cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
+      run: |
+        cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
+        ls -ltr ios/
 
     - name: Copy Provision
       run: cp profile.mobileprovision ios/SharedMeal.app/embedded.mobileprovision
