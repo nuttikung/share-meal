@@ -3929,7 +3929,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "shared_meal"
+name = "share_meal"
 version = "1.0.0"
 dependencies = [
  "dioxus",
