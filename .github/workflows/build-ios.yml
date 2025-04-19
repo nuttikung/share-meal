@@ -105,7 +105,7 @@ jobs:
         TEAM_ID: ${{ secrets.TEAM_ID }}
         COMPANY_NAME: ${{ secrets.COMPANY_NAME }}
       run: |
-        codesign --force --options runtime --entitlements ios/entitlements.plist --sign "Apple Development: "$COMPANY_NAME" ("$TEAM_ID")" SharedMeal.app
+        codesign --force --options runtime --entitlements ios/entitlements.plist --sign "Apple Development: "$COMPANY_NAME" ("$TEAM_ID")" ios/SharedMeal.app
       working-directory: .
 
     # - name: Archive to IPA
