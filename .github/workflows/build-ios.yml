@@ -118,8 +118,8 @@ jobs:
         zip -r SharedMeal.ipa release/SharedMeal.app
       working-directory: .
 
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ShareMeal.ipa
-    #     path: ./release/ShareMeal.ipa
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SharedMeal.ipa
+        path: ./release/SharedMeal.ipa
