@@ -22,7 +22,17 @@ jobs:
     - name: Install cargo-binstall
       run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
+    - name: Cache Dioxus CLI
+      uses: actions/cache@v4
+      id: cache-dioxus
+      with:
+        path: ~/.cargo/bin/dx
+        key: ${{ runner.os }}-dioxus-cli-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-dioxus-cli-
+
     - name: Install Dioxus CLI
+      if: steps.cache-dioxus.outputs.cache-hit != 'true'
       run: cargo binstall dioxus-cli
 
     - name: Build unsigned iOS bundle
@@ -65,40 +75,34 @@ jobs:
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-    - name: Make directory for profile
+    - name: Create entitlements file
+      env:
+        APPLICATION_IDENTIFIER: ${{ secrets.APPLICATION_IDENTIFIER }}
+        TEAM_IDENTIFIER: ${{ secrets.TEAM_IDENTIFIER }}
+      run: |
+        mkdir -p ios
+        cat > ios/entitlements.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>application-identifier</key>
+            <string>$APPLICATION_IDENTIFIER</string>
+            <key>com.apple.developer.team-identifier</key>
+            <string>$TEAM_IDENTIFIER</string>
+        </dict>
+        </plist>
+        EOF
+
+    - name: Copy Bundle and Sign
       env:
         TEAM_ID: ${{ secrets.TEAM_ID }}
+        COMPANY_NAME: ${{ secrets.COMPANY_NAME }}
       run: |
-        mkdir -p ios/ShareMeal.xcodeproj
-        cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-        codesign -f -s "Apple Development: Phudit Chuengjaroen ("$TEAM_ID")" --entitlements ios/ShareMeal.xcodeproj/embedded.mobileprovision target/dx/shared_meal/release/ios/SharedMeal.app
+        cp -R target/dx/shared_meal/release/ios/SharedMeal.app ios/SharedMeal.app
+        cp profile.mobileprovision ios/SharedMeal.app/embedded.mobileprovision
+        codesign --force --options runtime --entitlements ios/entitlements.plist --sign "Apple Development: "$COMPANY_NAME" ("$TEAM_ID")" SharedMeal.app
       working-directory: .
-        # ios/ShareMeal.xcodeproj/ShareMeal.entitlements
-
-    # - name: Create entitlements file
-    #   run: |
-    #     mkdir -p ios
-    #     cat > ios/entitlements.plist << EOF
-    #     <?xml version="1.0" encoding="UTF-8"?>
-    #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    #     <plist version="1.0">
-    #     <dict>
-    #         <key>application-identifier</key>
-    #         <string>${{ secrets.TEAM_ID }}.com.yourcompany.ShareMeal</string>
-    #         <key>com.apple.developer.team-identifier</key>
-    #         <string>${{ secrets.TEAM_ID }}</string>
-    #         <key>get-task-allow</key>
-    #         <false/>
-    #     </dict>
-    #     </plist>
-    #     EOF
-
-    # - name: Sign the app
-    #   run: |
-    #     mkdir -p ios/ShareMeal.xcodeproj
-    #     cp profile.mobileprovision ios/ShareMeal.xcodeproj/embedded.mobileprovision
-    #     codesign -f -s "Apple Distribution: Phudit Chuengjaroen (${{ secrets.TEAM_ID }})" --entitlements ios/ShareMeal.xcodeproj/ShareMeal.entitlements target/ios/release/ShareMeal.app
-    #   working-directory: .
 
     # - name: Archive to IPA
     #   run: |

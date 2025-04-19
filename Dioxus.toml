@@ -3,12 +3,13 @@ name = "share meal"
 
 [bundle]
 identifier = "com.phuditc.sharemeal"
+displayname = "Share Meal"
+name = "Share Meal"
 publisher = "Phudit Chuengjaroen"
 icon = ["assets/app-icon-share-meal.png"]
 category = "Utilities"
 copyright = "Phudit Chuengjaroen"
 short_description = "Split bills fairly by item, not just total. Track who ordered what and pay your share only"
-
 
 [web.app]
 # HTML title tag content
