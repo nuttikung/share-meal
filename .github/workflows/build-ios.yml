@@ -118,8 +118,12 @@ jobs:
         zip -r SharedMeal.ipa Payload
       working-directory: .
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: SharedMeal.ipa
-        path: ./release
+    - name: Copy Provision
+      run: ls -ltr SharedMeal.ipa
+      working-directory: .
+
+    # - name: Upload artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: SharedMeal.ipa
+    #     path: .
