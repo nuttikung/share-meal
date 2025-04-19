@@ -114,8 +114,8 @@ jobs:
     - name: Archive to IPA
       run: |
         mkdir -p release
-        # cp -R ios/ShareMeal.app release/ShareMeal.app
-        # zip -r ShareMeal.ipa release
+        cp -R ios/ShareMeal.app release/ShareMeal.app
+        zip -r ShareMeal.ipa release/ShareMeal.app
       working-directory: .
 
     # - name: Upload artifact
